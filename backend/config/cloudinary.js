@@ -1,11 +1,13 @@
-import {v2 as cloudinary } from "cloudinary"
+import { v2 as cloudinary } from "cloudinary";
+import loadEnv from "./env.js";
 
-const connectCloudinary = async()=>{
-    cloudinary.config({
-        cloud_name:process.env.CLOUDINARY_NAME,
-        api_key:process.env.CLOUDINARY_API_KEY,
-        api_secret:process.env.CLOUDINARY_SECRET_KEY}
-    )
+const connectCloudinary = async () => {
+  const env = loadEnv();
+  cloudinary.config({
+    cloud_name: env.cloudinaryName,
+    api_key: env.cloudinaryApiKey,
+    api_secret: env.cloudinarySecretKey,
+  });
+};
 
-}
 export default connectCloudinary;

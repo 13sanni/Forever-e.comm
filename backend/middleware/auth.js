@@ -9,7 +9,7 @@ const getTokenFromHeaders = (headers) => {
   return headers.token;
 };
 
-const adminAuth = async (req, res, next) => {
+const authUser = async (req, res, next) => {
   try {
     const env = loadEnv();
     const token = getTokenFromHeaders(req.headers);
@@ -21,13 +21,14 @@ const adminAuth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, env.jwtSecret);
-    if (!decoded?.isAdmin || decoded?.email !== env.adminEmail) {
-      return res.status(403).json({
+    if (!decoded?.id) {
+      return res.status(401).json({
         success: false,
-        message: "Forbidden. Admin access required.",
+        message: "Invalid token",
       });
     }
 
+    req.userId = decoded.id;
     next();
   } catch (error) {
     return res.status(401).json({
@@ -37,4 +38,4 @@ const adminAuth = async (req, res, next) => {
   }
 };
 
-export default adminAuth;
+export default authUser;
